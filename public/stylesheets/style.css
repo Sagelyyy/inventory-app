@@ -1,8 +1,25 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+:root{
+  --background-color: #9AC4F8;
+  --card-color: #f67e7d;
+
 }
 
-a {
-  color: #00B7FF;
+
+body{
+  background-color: var(--background-color);
+}
+
+.gap-10{
+  gap: 10px;
+}
+
+.nav-link{
+  cursor: pointer;
+}
+
+.hero{
+  background-color: var(--card-color);
+  width: 50rem;
+  margin: 0 auto;
+  margin-top: 20px;
 }
