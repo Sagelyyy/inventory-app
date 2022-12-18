@@ -7,9 +7,17 @@ const CatSchema = new Schema({
     age: {type: String, maxLength: 2},
     color: {type: String, required: true, maxLength: 30},
     desc: {type: String, maxLength: 100},
-    breed: {type: Schema.Types.ObjectId, red:"Breed"}
+    breed: {type: Schema.Types.ObjectId, ref:"Breed"},
+    gender: {
+        type: String,
+        required: true,
+        enum: ["Male", "Female"],
+        default: "Male"
+    },
 })
 
 CatSchema.virtual("url").get(function(){
-    return `/cats/${this._id}`
+    return `/cat/${this._id}`
 })
+
+module.exports = mongoose.model("Cat", CatSchema)

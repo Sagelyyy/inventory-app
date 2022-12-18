@@ -1,6 +1,13 @@
 extends layout
-
 block content
-  div(class="hero jumbotron mt--5")
-    h1(class="display-4") #{title}
+
+  -
+    var images = ["https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1092&q=80", 
+            "https://images.unsplash.com/photo-1511044568932-338cba0ad803?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80", 
+            "https://images.unsplash.com/photo-1491485880348-85d48a9e5312?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"]
+    var currImage = images[Math.floor(Math.random()*images.length)]
+
+  div(class="col-12 text-center container-fluid main")
+    h1(class="font-weight-light display-1") #{title}
     p(class="lead") We keep track of kitties.
+    img(class="bg-splash" src=currImage)

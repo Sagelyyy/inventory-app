@@ -12,3 +12,5 @@ const ShelterSchema = new Schema({
 ShelterSchema.virtual("url").get(function () {
     return `/shelter/${this._id}`
 })
+
+module.exports = mongoose.model("Shelter", ShelterSchema)

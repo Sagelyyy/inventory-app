@@ -36,8 +36,17 @@ exports.cat_detail = (req, res) => {
     res.send("TODO: cat detail get")
 }
 
-exports.cat_list = (req, res) => {
-    res.render("cat_list", {
-        title: "All Cats"
-    })
+exports.cat_list = function (req, res, next){
+    Cat.find()
+        .sort([["name", "ascending"]])
+        .populate("breed")
+        .exec(function (err, list_cats){
+            if (err){
+                return next(err)
+            }
+            res.render("cat_list", {
+                title: "All Cats",
+                list_cats
+            })
+        })
 }

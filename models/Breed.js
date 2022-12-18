@@ -16,3 +16,5 @@ const  BreedSchema = new Schema({
 BreedSchema.virtual("url").get(function(){
     return`/breeds/${this._id}`
 })
+
+module.exports = mongoose.model("Breed", BreedSchema)
