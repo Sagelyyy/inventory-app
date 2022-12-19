@@ -31,8 +31,15 @@ exports.shelter_detail = (req, res) => {
     res.send("TODO: shelter detail get")
 }
 
-exports.shelter_list = (req, res) => {
-    res.render("shelter_list", {
-        title: "All shelters"
-    })
+exports.shelter_list = function (req, res, next){
+    Shelter.find()
+        .exec(function(err, shelter_list){
+            if(err){
+                return next(err)
+            }
+            res.render("shelter_list", {
+                title: "All Shelters",
+                shelter_list
+            })
+        })
 }

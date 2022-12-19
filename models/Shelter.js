@@ -6,6 +6,7 @@ const ShelterSchema = new Schema({
     name: {type: String, required: true, maxLength: 100},
     desc: {type: String, required: true, maxLength: 300},
     location: {type: String, required: true, maxLength: 20},
+    current_cats: {type: [mongoose.Schema.ObjectId], ref: 'Cat'}
 
 });
 

@@ -32,8 +32,18 @@ exports.cat_update_post = (req, res) => {
     res.send("TODO cat update post")
 }
 
-exports.cat_detail = (req, res) => {
-    res.send("TODO: cat detail get")
+exports.cat_detail = (req, res, next) => {
+    Cat.findById(req.params.id)
+        .populate("breed")
+        .exec(function (err, cat) {
+            if (err){
+                return next(err)
+            }
+            res.render("cat_detail", {
+                title: cat.name,
+                cat
+            })
+        })
 }
 
 exports.cat_list = function (req, res, next){

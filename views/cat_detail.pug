@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    div(class="col-12 d-flex justify-content-center pt-5")
+        div(class="card text-left w-60 p-2")
+            h3(class="card-title text-center") #{cat.name}
+                h6(class="card-subtitle mb-2 text-muted text-left") #{cat.desc}
+                hr
+                ul
+                    li(class="text-capitalize"): span(class="fw-bolder") Name: </span> #{cat.name}
+                    li(class="text-capitalize") Age: #{cat.age}
+                    li(class="text-capitalize") Color: #{cat.color}
+                    li(class="text-capitalize") Gender: #{cat.gender}
+                    li(class="text-capitalize") Breed: 
+                        a(href=cat.breed.url) #{cat.breed.name}
