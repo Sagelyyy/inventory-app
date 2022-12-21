@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    div(class="col-12 d-flex justify-content-center pt-5")
+        div(class="card text-left w-60 p-2 hover-effect")
+            h3(class="card-title text-center") #{shelter.name}
+                h6(class="card-subtitle mb-2 text-muted text-left") #{shelter.desc}
+                hr
+                ul
+                    li(class="text-capitalize") Location: #{shelter.location}
+    div(class="d-flex flex-row justify-content-center col-12 pt-5 gap-10")
+        if shelter.current_cats.length > 0
+            each cat in shelter.current_cats
+                div
+                    h3(class="thumbnail-name") #{cat.name}
+                    p(class="text-muted thumbnail-breed") #{cat.breed.name}
+                    a(href=cat.url): img(src=cat.image class="img-thumbnail img-container hover-effect")
+

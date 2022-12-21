@@ -30,8 +30,16 @@ exports.breed_detail = (req, res) => {
     res.send("TODO: breed detail get")
 }
 
-exports.breed_list = (req, res) => {
-    res.render("breed_list", {
-        title: "All breeds"
-    })
+exports.breed_list = (req, res, next) => {
+    Breed.find()
+        .sort([["name", "ascending"]])
+        .exec(function (err, breed_list){
+            if(err){
+                return next(err)
+            }
+            res.render("breed_list", {
+                title: "All Breeds",
+                breed_list
+            })
+        })
 }

@@ -27,8 +27,15 @@ exports.shelter_update_post = (req, res) => {
     res.send("TODO shelter update post")
 }
 
-exports.shelter_detail = (req, res) => {
-    res.send("TODO: shelter detail get")
+exports.shelter_detail = (req, res, next) => {
+    Shelter.findById(req.params.id)
+      .populate({path: "current_cats", populate: {path: "breed"}})
+      .exec(function (err, shelter) {
+        res.render("shelter_detail", {
+            title: shelter.name,
+            shelter
+        })
+      })
 }
 
 exports.shelter_list = function (req, res, next){

@@ -14,6 +14,7 @@ const CatSchema = new Schema({
         enum: ["Male", "Female"],
         default: "Male"
     },
+    image: {type: String}
 })
 
 CatSchema.virtual("url").get(function(){
