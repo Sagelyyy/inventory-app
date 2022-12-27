@@ -1,22 +1,11 @@
 extends layout
-
+include mixins/cat_card
 block content
   div(class="col-12 text-center border-dark hero")
     img(src="https://images.unsplash.com/photo-1570824104453-508955ab713e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1011&q=80")
     h1(class="font-weight-light display-1") #{title}
-  div(class="col-12 text-center card-container gap-10")
+  div(class="col-md-8 mx-auto text-left card-container gap-10 d-flex flex-wrap")
     each cat in list_cats
-      div(class="card text-left w-60 p-2 hover-effect")
-        h3(class="card-title text-center") #{cat.name}
-        h6(class="card-subtitle mb-2 text-muted text-left") #{cat.desc}
-        hr
-        ul
-          li(class="text-capitalize"): span(class="fw-bolder") Name: </span> #{cat.name}
-          li(class="text-capitalize") Age: #{cat.age}
-          li(class="text-capitalize") Color: #{cat.color}
-          li(class="text-capitalize") Gender: #{cat.gender}
-          li(class="text-capitalize") Breed: 
-            a(href=cat.breed.url) #{cat.breed.name}
-          li 
-            a(href=cat.url) View #{cat.name}'s page
+      +card(cat)
+
 

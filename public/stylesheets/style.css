@@ -1,13 +1,14 @@
-:root{
-  --background-color: #9AC4F8;
+:root {
+  --background-color: #9ac4f8;
   --card-color: #f67e7d;
   --font-style: "Inter";
-
 }
 
-ul{list-style: none;}
+ul {
+  list-style: none;
+}
 
-.main{
+.main {
   z-index: -1;
   position: absolute;
   margin: 0 auto;
@@ -16,7 +17,7 @@ ul{list-style: none;}
   height: 92%;
 }
 
-.main > img{
+.main > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -26,11 +27,11 @@ ul{list-style: none;}
   z-index: -2;
 }
 
-.gap-10{
+.gap-10 {
   gap: 10px;
 }
 
-.nav-link{
+.nav-link {
   cursor: pointer;
 }
 
@@ -49,24 +50,24 @@ ul{list-style: none;}
   text-shadow: 1px 1px 2px black;
 }
 
-.card-container{
+.card-container {
   display: flex;
   flex-direction: row;
 }
 
-.hover-effect{
+.hover-effect {
   width: 500px;
   word-wrap: normal;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.3s ease-in-out;
 }
 
-.hover-effect:hover{
+.hover-effect:hover {
   cursor: pointer;
   box-shadow: 5px 5px 20px black;
 }
 
-.hero > img{
+.hero > img {
   width: 100%;
   height: 100%;
   z-index: -1;
@@ -77,14 +78,14 @@ ul{list-style: none;}
   object-fit: cover;
 }
 
-.img-container{
+.img-container {
   width: 400px;
   height: 400px;
   object-fit: cover;
   border-radius: 10px;
 }
 
-.thumbnail-name{
+.thumbnail-name {
   position: relative;
   left: 20px;
   top: calc(80%);
@@ -93,11 +94,10 @@ ul{list-style: none;}
   text-shadow: 1px 1px 2px black;
 }
 
-.thumbnail-breed{
+.thumbnail-breed {
   position: relative;
   left: 20px;
   top: calc(80%);
   font-family: var(--font-style);
   text-shadow: 1px 1px 2px black;
 }
-
