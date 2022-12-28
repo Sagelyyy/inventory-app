@@ -1,7 +1,6 @@
 extends layout 
 
 block content
-
     div(class="d-flex col-12 flex-row justify-content-center")
         div(class="d-flex flex-column")
             img(class="img-container img-thumbnail" src=cat.image)
@@ -30,6 +29,15 @@ block content
                     select#gender.form-control(name='gender' type="text" placeholder="Select Gender" required="true")
                         option(value='Male' selected=(cat.gender==='Male' || cat.gender==='male' ? 'selected' : false )) Male
                         option(value='Female' selected=(cat.gender==='Female' || cat.gender==='female' ? 'selected' : false )) Female
+                    label(for='shelter') Shelter: 
+                        select#shelter.form-control(type='select', placeholder="Select Shelter", name="shelter")
+                            - shelters.sort(function(a,b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0})
+                                if cat
+                                    each shelter in shelters
+                                        if shelter.current_cats.includes(cat._id)
+                                            option(value=shelter._id, selected) #{shelter.name}
+                                        else
+                                            option(value=shelter._id) #{shelter.name}
                     label(for='desc') Description:
                     textarea#desc.form-control(name='desc' placeholder="Description" rows="5")=undefined===cat ? '': cat.desc
                 button.btn.btn-primary(type='submit') Submit

@@ -34,7 +34,7 @@ exports.cat_update_get = (req, res, next) => {
         Cat.findById(req.params.id).populate("breed").exec(callback);
       },
       shelter(callback) {
-        Shelter.find({ current_cats: req.params.id }).exec(callback);
+        Shelter.find().exec(callback);
       },
       breed(callback) {
         Breed.find()
@@ -49,7 +49,7 @@ exports.cat_update_get = (req, res, next) => {
       res.render("cat_form", {
         title: results.cat.name,
         cat: results.cat,
-        shelter: results.shelter,
+        shelters: results.shelter,
         breeds: results.breed,
       });
     }
@@ -61,6 +61,10 @@ exports.cat_update_post = [
     if (!Array.isArray(req.body.breed)) {
       req.body.breed =
         typeof req.body.breed === "undefined" ? [] : [req.body.breed];
+    }
+    if (!Array.isArray(req.body.shelter)) {
+      req.body.shelter =
+        typeof req.body.shelter === "undefined" ? [] : [req.body.shelter];
     }
     next();
   },
@@ -75,13 +79,15 @@ exports.cat_update_post = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
+  body("shelter.*").escape(),
   body("desc").trim().escape(),
+
   (req, res, next) => {
     const errors = validationResult(req);
 
     const newCat = new Cat({
       name: req.body.name,
-      breed: typeof req.body.breed === "undefined" ? [] : req.body.breed,
+      breed: req.body.breed,
       age: req.body.age,
       color: req.body.color,
       gender: req.body.gender,
@@ -96,28 +102,55 @@ exports.cat_update_post = [
             Cat.findById(req.params.id).populate("breed").exec(callback);
           },
           shelter(callback) {
-            Shelter.find({ current_cats: req.params.id }).exec(callback);
+            Shelter.find().exec(callback);
+          },
+          breed(callback) {
+            Breed.find()
+              .sort([["name", "ascending"]])
+              .exec(callback);
           },
         },
         (err, results) => {
           if (err) {
             return next(err);
           }
-          res.render("cat_detail", {
+          res.render("cat_form", {
             title: results.cat.name,
             cat: results.cat,
-            shelter: results.shelter,
+            shelters: results.shelter,
+            breeds: results.breed,
             errors: errors.array(),
           });
         }
       );
     }
-    Cat.findByIdAndUpdate(req.params.id, newCat, {}, (err, theCat) => {
-      if (err) {
-        return next(err);
+    async.parallel(
+      {
+        shelterUpdateDelete(callback) {
+          Shelter.findOneAndUpdate(
+            { current_cats: req.params.id },
+            { $pull: { current_cats: req.params.id } },
+            callback
+          );
+        },
+        shelterUpdateAdd(callback) {
+          Shelter.updateOne(
+            { _id: req.body.shelter },
+            { $push: { current_cats: req.params.id } },
+            callback
+          );
+        },
+        catUpdate(callback) {
+          Cat.findByIdAndUpdate(req.params.id, newCat, callback);
+        },
+      },
+      (err, results) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect(newCat.url);
       }
-      res.redirect(theCat.url);
-    });
+    );
   },
 ];
 
