@@ -1,0 +1,40 @@
+extends layout 
+
+block content
+
+    div(class="d-flex col-12 flex-row justify-content-center")
+        div(class="d-flex flex-column")
+            img(class="img-container img-thumbnail" src=cat.image)
+        div(class="d-flex flex-column p-4 w-75")
+            h3 Update #{cat.name}
+            div(class="d-flex flex-column")
+            form(method="POST" action='')
+                div(class="form-group text-capitalize")
+                    label(for='name') Name:
+                    input#name.form-control(name='name' type="text" placeholder="Name" required="true" value=(undefined===cat ? '': cat.name))
+                    label(for='breed') Breed:
+                    select#breed.form-control(type='select', placeholder='Select Breed' name='breed' required='true' )
+                        - breeds.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+                        for breed in breeds 
+                            if cat 
+                                option(value=breed._id
+                                selected=(breed._id.toString()==cat.breed._id
+                                || breed._id.toString()==cat.breed) ? 'selected' : false ) #{breed.name}
+                            else 
+                                option(value=breed._id) #{breed.name}
+                    label(for='age') Age:
+                    input#age.form-control(name='age' type="text" placeholder="Age" required="true" value=(undefined===cat ? '': cat.age))
+                    label(for='color') Color:
+                    input#color.form-control(name='color' type="text" placeholder="Color" required="true" value=(undefined===cat ? '': cat.color))
+                    label(for='gender') Gender:
+                    select#gender.form-control(name='gender' type="text" placeholder="Select Gender" required="true")
+                        option(value='Male' selected=(cat.gender==='Male' || cat.gender==='male' ? 'selected' : false )) Male
+                        option(value='Female' selected=(cat.gender==='Female' || cat.gender==='female' ? 'selected' : false )) Female
+                    label(for='desc') Description:
+                    textarea#desc.form-control(name='desc' placeholder="Description" rows="5")=undefined===cat ? '': cat.desc
+                button.btn.btn-primary(type='submit') Submit
+    if errors
+        ul
+            for error in errors
+                li!= error.msg
+                    
