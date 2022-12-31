@@ -4,6 +4,9 @@ block content
   div(class="col-12 text-center border-dark hero")
     img(src="https://images.unsplash.com/photo-1586774033022-81c512d0a901?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHZldCUyMGNsaW5pY3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60")
     h1(class="font-weight-light display-1") #{title}
+  div(class="d-flex justify-content-center")
+    a(href="/shelter/create")
+      button(class="btn btn-success") New Shelter
   div(class="col-12 text-center card-container gap-10 pt-5")
     each shelter in shelter_list
       div(class="card text-left w-60 p-2 hover-effect")

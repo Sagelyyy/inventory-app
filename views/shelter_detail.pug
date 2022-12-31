@@ -8,6 +8,11 @@ block content
                 hr
                 ul
                     li(class="text-capitalize") Location: #{shelter.location}
+            div(class="d-flex justify-content-center flex-row gap-10")
+                a(href=shelter.url + "/update")
+                    button(class="btn btn-success") Update Shelter
+                a(href=shelter.url + "/delete")
+                    button(class="btn btn-danger") Delete Shelter
     div(class="d-flex flex-row justify-content-center col-12 pt-5 gap-10")
         if shelter.current_cats.length > 0
             each cat in shelter.current_cats

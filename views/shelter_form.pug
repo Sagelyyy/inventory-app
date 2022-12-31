@@ -1,0 +1,21 @@
+extends layout 
+
+block content 
+    div(class="d-flex flex-column p-4 w-75")
+        h3 #{title}
+        form(method="POST" action='')
+            div(class="form-group text capitalize")
+                label(for="name") Name: 
+                input#name.form-control(name="name" type="text" placeholder="Name" required value=(shelter===undefined ? '' : shelter.name))
+                label(for="desc") Description: 
+                textarea#desc.form-control(name="desc" placeholder="Description" rows=5)=undefined===shelter? '' : shelter.desc
+                label(for="location") Location: 
+                input#location.form-control(name="location" type="text" placeholder="Location" required value=(shelter===undefined ? '' : shelter.location))
+                if shelter
+                    each cat in shelter.current_cats
+                        input#current_cats.form-control(type="hidden" name="current_cats" value=(shelter===undefined ? '' : cat))
+            button(class="btn btn-success") Submit
+    if errors
+        ul
+            for error in errors
+                li!= error.msg
