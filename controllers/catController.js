@@ -11,20 +11,170 @@ exports.index = (req, res) => {
   });
 };
 
-exports.cat_create_get = (req, res) => {
-  res.send("TODO: cat create get");
+exports.cat_create_get = (req, res, next) => {
+  async.parallel(
+    {
+      findBreed(callback) {
+        Breed.find()
+          .sort([["name", "ascending"]])
+          .exec(callback);
+      },
+      shelter(callback) {
+        Shelter.find().exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("cat_form", {
+        title: "Add a new cat",
+        shelters: results.shelter,
+        breeds: results.findBreed,
+      });
+    }
+  );
 };
 
-exports.cat_create_post = (req, res) => {
-  res.send("TODO: cat create post");
+exports.cat_create_post = [
+  (req, res, next) => {
+    if (!Array.isArray(req.body.breed)) {
+      req.body.breed =
+        typeof req.body.breed === "undefined" ? [] : [req.body.breed];
+    }
+    if (!Array.isArray(req.body.shelter)) {
+      req.body.shelter =
+        typeof req.body.shelter === "undefined" ? [] : [req.body.shelter];
+    }
+    next();
+  },
+  body("name", "Name must not be empty and only be letters")
+    .trim()
+    .isLength({ min: 1 })
+    .isAlpha()
+    .escape(),
+  body("breed.*", "Breed must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("age", "Age must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("color", "Color must be specified").trim().isLength({ min: 1 }).escape(),
+  body("gender", "Gender must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("shelter.*").escape(),
+  body("desc").trim().escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const newCat = new Cat({
+      name: req.body.name,
+      breed: req.body.breed,
+      age: req.body.age,
+      color: req.body.color,
+      gender: req.body.gender,
+      desc: req.body.desc,
+      image: "/images/default.jpg",
+    });
+
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          findBreed(callback) {
+            Breed.find()
+              .sort([["name", "ascending"]])
+              .exec(callback);
+          },
+          shelter(callback) {
+            Shelter.find().exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+          res.render("cat_form", {
+            title: "Add a new cat",
+            shelters: results.shelter,
+            breeds: results.findBreed,
+          });
+        }
+      );
+      return;
+    }
+    newCat.save((err) => {
+      console.log(newCat._id);
+      if (err) {
+        return next(err);
+      }
+      Shelter.findByIdAndUpdate(
+        req.body.shelter,
+        {
+          $push: { current_cats: newCat._id },
+        },
+        function (err, doc) {
+          if (err) {
+            console.log(err);
+          }
+        }
+      );
+      res.redirect(newCat.url);
+    });
+  },
+];
+
+exports.cat_delete_get = (req, res, next) => {
+  async.parallel(
+    {
+      cat(callback) {
+        Cat.findById(req.params.id).populate("breed").exec(callback);
+      },
+      shelter(callback) {
+        Shelter.find({ current_cats: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("cat_delete", {
+        title: results.cat.name,
+        cat: results.cat,
+        shelter: results.shelter,
+      });
+    }
+  );
 };
 
-exports.cat_delete_get = (req, res) => {
-  res.send("TODO: cat delete get");
-};
-
-exports.cat_delete_post = (req, res) => {
-  res.send("TODO: cat delete post");
+exports.cat_delete_post = (req, res, next) => {
+  async.parallel(
+    {
+      cat(callback) {
+        Cat.findById(req.params.id).populate("breed").exec(callback);
+      },
+      shelter(callback) {
+        Shelter.find({ current_cats: req.params.id }).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      res.render("cat_delete", {
+        title: results.cat.name,
+        cat: results.cat,
+        shelter: results.shelter,
+      });
+    },
+    Cat.findByIdAndRemove(req.params.id, (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/cats");
+    })
+  );
 };
 
 exports.cat_update_get = (req, res, next) => {
@@ -68,7 +218,11 @@ exports.cat_update_post = [
     }
     next();
   },
-  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("name", "Name must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .isAlpha()
+    .escape(),
   body("breed.*", "Breed must be specified")
     .trim()
     .isLength({ min: 1 })

@@ -4,6 +4,9 @@ block content
   div(class="col-12 text-center border-dark hero")
     img(src="https://images.unsplash.com/photo-1570824104453-508955ab713e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1011&q=80")
     h1(class="font-weight-light display-1") #{title}
+  div(class="d-flex justify-content-center")
+    a(href="/cat/create")
+      button(class="btn btn-success") Add a new cat
   div(class="col-md-8 mx-auto text-left card-container gap-10 d-flex flex-wrap")
     each cat in list_cats
       +card(cat)
