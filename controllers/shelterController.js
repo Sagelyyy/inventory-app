@@ -9,12 +9,45 @@ exports.shelter_create_get = (req, res) => {
   });
 };
 
-exports.shelter_create_post = (req, res, next) => {
-  res.send("TODO: shelter create post");
-};
+exports.shelter_create_post = [
+  body("name", "Name must not be empty").trim().isLength({ min: 3 }).escape(),
+  body("desc", "Description is required").trim().isLength({ min: 10 }).escape(),
+  body("location", "Location is required").trim().escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
 
-exports.shelter_delete_get = (req, res) => {
-  res.send("TODO: shelter delete get");
+    const newShelter = new Shelter({
+      name: req.body.name,
+      desc: req.body.desc,
+      location: req.body.location,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("shelter_form", {
+        title: "Add a new shelter",
+        errors: errors.array,
+      });
+      return;
+    }
+    newShelter.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(newShelter.url);
+    });
+  },
+];
+
+exports.shelter_delete_get = (req, res, next) => {
+  Shelter.findById(req.params.id).exec(function (err, shelter) {
+    if (err) {
+      return next(err);
+    }
+    res.render("shelter_delete", {
+      title: `Delete ${shelter.name}?`,
+      shelter,
+    });
+  });
 };
 
 exports.shelter_delete_post = (req, res) => {
@@ -81,17 +114,6 @@ exports.shelter_update_post = [
         res.redirect(doc.url);
       }
     );
-    // Shelter.findByIdAndUpdate(
-    //   req.params.id,
-    //   newShelter,
-    //   {},
-    //   (err, theShelter) => {
-    //     if (err) {
-    //       return next(err);
-    //     }
-    //     res.redirect(theShelter.url);
-    //   }
-    // );
   },
 ];
 

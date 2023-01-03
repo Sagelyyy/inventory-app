@@ -105,7 +105,6 @@ exports.cat_create_post = [
       return;
     }
     newCat.save((err) => {
-      console.log(newCat._id);
       if (err) {
         return next(err);
       }
