@@ -1,22 +1,29 @@
 extends layout
 include mixins/cat_card
 block content
-    div(class="d-flex justify-content-center flex-row gap-10")
-        h3 Are you sure you want to delete #{shelter.name}?
-            form(method='POST' action='')
-                div.form-group
-                input#catid.form-control(type='hidden',name='shelterid', required='true', value=shelter._id )
-                button.btn.btn-danger(type='submit') Delete
+    if shelter.current_cats.length
+        div(class="d-flex flex-row justify-content-center col-12 pt-5 gap-10")
+            h3 Move the following cats to other shelters before deleting this shelter.
+        
+        div(class="d-flex flex-row justify-content-center col-12 pt-5 gap-10")
+            if shelter.current_cats.length > 0
+                each cat in shelter.current_cats
+                    +card(cat)
+    else
 
-    div(class="d-flex justify-content-center pt-5")
-        div(class="card text-left w-60 p-2 hover-effect")
-            h3(class="card-title text-center") #{shelter.name}
-                h6(class="card-subtitle mb-2 text-muted text-left") #{shelter.desc}
-                hr
-                ul
-                    li(class="text-capitalize") Location: #{shelter.location}
-    div(class="d-flex flex-row justify-content-center col-12 pt-5 gap-10")
-        if shelter.current_cats.length > 0
-            each cat in shelter.current_cats
-                +card(cat)
+        div(class="d-flex justify-content-center flex-row gap-10")
+            h3 Are you sure you want to delete #{shelter.name}?
+                form(method='POST' action='')
+                    div.form-group
+                    input#catid.form-control(type='hidden',name='shelterid', required='true', value=shelter._id )
+                    button.btn.btn-danger(type='submit') Delete
+
+        div(class="d-flex justify-content-center pt-5")
+            div(class="card text-left w-60 p-2 hover-effect")
+                h3(class="card-title text-center") #{shelter.name}
+                    h6(class="card-subtitle mb-2 text-muted text-left") #{shelter.desc}
+                    hr
+                    ul
+                        li(class="text-capitalize") Location: #{shelter.location}
+
 

@@ -39,19 +39,40 @@ exports.shelter_create_post = [
 ];
 
 exports.shelter_delete_get = (req, res, next) => {
-  Shelter.findById(req.params.id).exec(function (err, shelter) {
-    if (err) {
-      return next(err);
-    }
-    res.render("shelter_delete", {
-      title: `Delete ${shelter.name}?`,
-      shelter,
+  Shelter.findById(req.params.id)
+    .populate({ path: "current_cats", populate: { path: "breed" } })
+    .exec(function (err, shelter) {
+      if (err) {
+        return next(err);
+      }
+      res.render("shelter_delete", {
+        title: `Delete ${shelter.name}?`,
+        shelter,
+      });
     });
-  });
 };
 
-exports.shelter_delete_post = (req, res) => {
-  res.send("TODO: shelter delete post");
+exports.shelter_delete_post = (req, res, next) => {
+  Shelter.findById(req.params.id)
+    .populate({ path: "current_cats", populate: { path: "breed" } })
+    .exec(function (err, shelter) {
+      if (err) {
+        return next(err);
+      }
+      if (shelter.current_cats.length > 0) {
+        res.render("shelter_delete", {
+          title: `Delete ${shelter.name}?`,
+          shelter,
+        });
+        return;
+      }
+      Shelter.findByIdAndRemove(req.body.shelterid, (err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/shelters");
+      });
+    });
 };
 
 exports.shelter_update_get = (req, res, next) => {
