@@ -4,10 +4,13 @@ block content
   div(class="col-12 text-center border-dark hero")
     img(src="https://images.unsplash.com/photo-1532386236358-a33d8a9434e3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjZ8fGNhdHN8ZW58MHwwfDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60")
     h1(class="font-weight-light display-1") #{title}
+  div(class="d-flex justify-content-center")
+    a(href="/breed/create")
+      button(class="btn btn-success") New Breed
   if breed_list.length > 0
-    div
-      ul
-        each breed in breed_list 
-          li #{breed.name}
+    div(class="breed-list")
+      each breed in breed_list 
+        a(href=breed.url)
+          p #{breed.name}
   else 
     h3 No Breeds Found

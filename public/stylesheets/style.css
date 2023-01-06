@@ -113,3 +113,15 @@ ul {
   font-family: var(--font-style);
   text-shadow: 1px 1px 2px black;
 }
+
+.breed-list {
+  margin: 50px auto 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-height: 50vh;
+  padding: 10px;
+}
+.breed-list > a {
+  width: fit-content;
+}
