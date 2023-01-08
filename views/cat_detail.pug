@@ -4,10 +4,11 @@ block content
     div(class="d-flex col-12 flex-row justify-content-center")
         div(class="d-flex flex-column")
             img(class="img-container img-thumbnail" src=cat.image)
-            p
-                a(href=cat.url+'/update') Update Cat
-            p 
-                a(href=cat.url+'/delete') Delete Cat
+            div(class="d-flex justify-content-center flex-row gap-10 pt-2")
+                a(href=cat.url + "/update")
+                    button(class="btn btn-success") Update cat
+                a(href=cat.url + "/delete")
+                    button(class="btn btn-danger") Delete cat
         div(class="d-flex flex-column p-4 w-75")
             h3(class="") #{cat.name}
             p(class="text-muted") #{cat.breed.name}

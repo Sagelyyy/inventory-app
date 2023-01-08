@@ -1,0 +1,16 @@
+extends layout 
+
+block content 
+    div(class="d-flex flex-column p-4 w-75")
+        h3 #{title}
+        form(method="POST" action='')
+            div(class="form-group text capitalize")
+                label(for="name") Name: 
+                input#name.form-control(name="name" type="text" placeholder="Name" required value=(breed===undefined ? '' : breed.name))
+                label(for="desc") Description: 
+                textarea#desc.form-control(name="desc" placeholder="Description" rows=5)=undefined===breed? '' : breed.desc
+            button(class="btn btn-success") Submit
+    if errors
+        ul
+            for error in errors
+                li!= error.msg
