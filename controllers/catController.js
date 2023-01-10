@@ -4,6 +4,7 @@ const Breed = require("../models/Breed");
 const { body, validationResult } = require("express-validator");
 const dotenv = require("dotenv");
 const async = require("async");
+const multer = require("multer");
 
 dotenv.config();
 
@@ -81,7 +82,7 @@ exports.cat_create_post = [
       color: req.body.color,
       gender: req.body.gender,
       desc: req.body.desc,
-      image: "/images/default.jpg",
+      image: `/images/${req.file.filename}`,
     });
 
     if (!errors.isEmpty()) {
