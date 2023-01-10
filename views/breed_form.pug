@@ -9,6 +9,8 @@ block content
                 input#name.form-control(name="name" type="text" placeholder="Name" required value=(breed===undefined ? '' : breed.name))
                 label(for="desc") Description: 
                 textarea#desc.form-control(name="desc" placeholder="Description" rows=5)=undefined===breed? '' : breed.desc
+                label(for="password") Password: 
+                input#password.form-control(name="password" type="password" placeholder="Password")
             button(class="btn btn-success") Submit
     if errors
         ul

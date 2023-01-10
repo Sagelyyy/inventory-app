@@ -11,6 +11,8 @@ block content
                 textarea#desc.form-control(name="desc" placeholder="Description" rows=5)=undefined===shelter? '' : shelter.desc
                 label(for="location") Location: 
                 input#location.form-control(name="location" type="text" placeholder="Location" required value=(shelter===undefined ? '' : shelter.location))
+                label(for="password") Password: 
+                input#password.form-control(name="password" type="password" placeholder="Password")
                 if shelter
                     each cat in shelter.current_cats
                         input#current_cats.form-control(type="hidden" name="current_cats" value=(shelter===undefined ? '' : cat))

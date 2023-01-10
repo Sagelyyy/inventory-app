@@ -1,9 +1,11 @@
 const Shelter = require("../models/Shelter");
 const { body, validationResult } = require("express-validator");
-
 const async = require("async");
+const dotenv = require("dotenv");
 
-exports.shelter_create_get = (req, res) => {
+dotenv.config();
+
+exports.shelter_create_get = (req, res, next) => {
   res.render("shelter_form", {
     title: "Add a new shelter",
   });
@@ -14,6 +16,9 @@ exports.shelter_create_post = [
   body("desc", "Description is required").trim().isLength({ min: 10 }).escape(),
   body("location", "Location is required").trim().escape(),
   (req, res, next) => {
+    if (req.body.password !== process.env.ADMIN) {
+      return next(Error("Bad admin password"));
+    }
     const errors = validationResult(req);
 
     const newShelter = new Shelter({
@@ -25,7 +30,7 @@ exports.shelter_create_post = [
     if (!errors.isEmpty()) {
       res.render("shelter_form", {
         title: "Add a new shelter",
-        errors: errors.array,
+        errors: errors.array(),
       });
       return;
     }
@@ -53,6 +58,9 @@ exports.shelter_delete_get = (req, res, next) => {
 };
 
 exports.shelter_delete_post = (req, res, next) => {
+  if (req.body.password !== process.env.ADMIN) {
+    return next(Error("Bad admin password"));
+  }
   Shelter.findById(req.params.id)
     .populate({ path: "current_cats", populate: { path: "breed" } })
     .exec(function (err, shelter) {
@@ -101,6 +109,9 @@ exports.shelter_update_post = [
   body("desc", "Bad desc").trim().escape(),
   body("location", "Bad Location").trim().isLength({ min: 1 }).escape(),
   (req, res, next) => {
+    if (req.body.password !== process.env.ADMIN) {
+      return next(Error("Bad admin password"));
+    }
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {

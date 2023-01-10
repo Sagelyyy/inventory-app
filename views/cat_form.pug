@@ -53,6 +53,8 @@ block content
                     br
                     label(for='desc') Description:
                     textarea#desc.form-control(name='desc' placeholder="Description" rows="5")=undefined===cat ? '': cat.desc
+                    label(for="password") Password: 
+                    input#password.form-control(name="password" type="password" placeholder="Password")
                 button.btn.btn-primary(type='submit') Submit
     if errors
         ul

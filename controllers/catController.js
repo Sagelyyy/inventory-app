@@ -2,8 +2,10 @@ const Cat = require("../models/Cat");
 const Shelter = require("../models/Shelter");
 const Breed = require("../models/Breed");
 const { body, validationResult } = require("express-validator");
-
+const dotenv = require("dotenv");
 const async = require("async");
+
+dotenv.config();
 
 exports.index = (req, res) => {
   res.render("index", {
@@ -67,6 +69,9 @@ exports.cat_create_post = [
   body("desc").trim().escape(),
 
   (req, res, next) => {
+    if (req.body.password !== process.env.ADMIN) {
+      return next(Error("Bad admin password"));
+    }
     const errors = validationResult(req);
 
     const newCat = new Cat({
@@ -148,32 +153,15 @@ exports.cat_delete_get = (req, res, next) => {
 };
 
 exports.cat_delete_post = (req, res, next) => {
-  async.parallel(
-    {
-      cat(callback) {
-        Cat.findById(req.params.id).populate("breed").exec(callback);
-      },
-      shelter(callback) {
-        Shelter.find({ current_cats: req.params.id }).exec(callback);
-      },
-    },
-    (err, results) => {
-      if (err) {
-        return next(err);
-      }
-      res.render("cat_delete", {
-        title: results.cat.name,
-        cat: results.cat,
-        shelter: results.shelter,
-      });
-    },
-    Cat.findByIdAndRemove(req.params.id, (err) => {
-      if (err) {
-        return next(err);
-      }
-      res.redirect("/cats");
-    })
-  );
+  if (req.body.password !== process.env.ADMIN) {
+    return next(Error("Bad admin password"));
+  }
+  Cat.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/cats");
+  });
 };
 
 exports.cat_update_get = (req, res, next) => {
@@ -236,6 +224,9 @@ exports.cat_update_post = [
   body("desc").trim().escape(),
 
   (req, res, next) => {
+    if (req.body.password !== process.env.ADMIN) {
+      return next(Error("Bad admin password"));
+    }
     const errors = validationResult(req);
 
     const newCat = new Cat({

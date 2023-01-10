@@ -10,14 +10,14 @@ block content
                 each cat in shelter.current_cats
                     +card(cat)
     else
-
         div(class="d-flex justify-content-center flex-row gap-10")
             h3 Are you sure you want to delete #{shelter.name}?
                 form(method='POST' action='')
                     div.form-group
                     input#catid.form-control(type='hidden',name='shelterid', required='true', value=shelter._id )
+                    label(for="password") Password: 
+                    input#password.form-control(name="password" type="password" placeholder="Password")
                     button.btn.btn-danger(type='submit') Delete
-
         div(class="d-flex justify-content-center pt-5")
             div(class="card text-left w-60 p-2 hover-effect")
                 h3(class="card-title text-center") #{shelter.name}

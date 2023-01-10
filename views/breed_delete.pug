@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    div(class="d-flex col-12 flex-row justify-content-center p-4")
+        h3 Are you sure you want to delete #{breed.name}?
+                form(method='POST' action='')
+                    div.form-group
+                    input#breedid.form-control(type='hidden',name='breedid', required='true', value=breed._id )
+                    label(for="password") Password: 
+                    input#password.form-control(name="password" type="password" placeholder="Password")
+                    button.btn.btn-danger.mt-1(type='submit') Delete
+    div(class="d-flex col-12 flex-column justify-content-center gap-10")
+        h3 #{title}
+        p #{breed.desc}
+
+    if errors
+        ul
+            for error in errors
+                li!= error.msg
+
+            
